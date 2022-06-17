@@ -31,7 +31,7 @@ class Genre(db.Model):
     __tablename__ = 'genres'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Integer, nullable=False, unique=True)
+    name = db.Column(db.String(16), nullable=False, unique=True)
 
     def __repr__(self):
         return '<Genre %r>' % self.name
@@ -61,6 +61,9 @@ class Image(db.Model):
     #     return url_for('image', image_id=self.id)
 
 
+CONST_STATUS = 1
+
+
 class Review(db.Model):
     __tablename__ = 'reviews'
 
@@ -70,7 +73,7 @@ class Review(db.Model):
     review_rating = db.Column(db.Integer, nullable=False)
     text_review = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, server_default=sa.sql.func.now())
-    status_id = db.Column(db.Integer, db.ForeignKey('status.id'), default=1)
+    status_id = db.Column(db.Integer, db.ForeignKey('status.id'), default=CONST_STATUS)
 
     status = db.relationship('Status', backref=db.backref('reviews'))
     book = db.relationship('Book', backref=db.backref('reviews'))
