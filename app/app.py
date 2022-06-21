@@ -36,9 +36,9 @@ def index():
     return render_template('index.html', genres=genres)
 
 
-@app.route('/images/<image_id>')
-def image(image_id):
-    img = Image.query.get(image_id)
+@app.route('/images/<book_id>')
+def image(book_id):
+    img = Image.query.filter_by(book_id=book_id).first()
     if img is None:
         abort(404)
     return send_from_directory(app.config['UPLOAD_FOLDER'], img.storage_filename)

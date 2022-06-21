@@ -3,12 +3,12 @@ from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
 from app import db
-from models import Genre, Book, User, Review
+from models import Genre, Book, User, Review, book_genre
 from tools import ImageSaver, BooksFilter
 
 bp = Blueprint('books', __name__, url_prefix='/books')
 
-BOOK_PARAMS = ['name', 'genres', 'year', 'author', 'pub_house', 'page_count']
+BOOK_PARAMS = ['name', 'desc', 'year', 'author', 'pub_house', 'page_count']
 
 PER_PAGE = 5
 
@@ -46,11 +46,18 @@ def new():
 def create():
 
     book = Book(**params())
+
     try:
         db.session.add(book)
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
+
+    genre_list = request.form.getlist('genres')
+    temp = Genre.query.filter(Genre.id.in_(genre_list))
+    for gnr in temp:
+        book.genres.append(gnr)
+    db.session.commit()
 
     f = request.files.get('background_img')
     if f and f.filename:

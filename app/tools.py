@@ -23,7 +23,7 @@ class BooksFilter:
 
     def __filter_by_genre_ids(self):
         if self.genre_ids:
-            self.query = self.query.filter(Book.genres.id.in_(self.genre_ids))
+            self.query = self.query.filter(Book.genres.id.in_(self.genre_ids))  # исправить
 
 
 class ImageSaver:
