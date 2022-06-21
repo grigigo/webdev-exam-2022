@@ -22,12 +22,12 @@ migrate = Migrate(app, db)
 
 from models import Genre, Image, Book
 
-# from auth import bp as auth_bp, init_login_manager
-# from courses import bp as courses_bp
-# app.register_blueprint(auth_bp)
-# app.register_blueprint(courses_bp)
+from auth import bp as auth_bp, init_login_manager
+from books import bp as books_bp
+app.register_blueprint(auth_bp)
+app.register_blueprint(books_bp)
 
-# init_login_manager(app)
+init_login_manager(app)
 
 
 @app.route('/')

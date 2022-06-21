@@ -20,11 +20,23 @@ class Book(db.Model):
     pub_house = db.Column(db.String(64), nullable=False)
     author = db.Column(db.String(64), nullable=False)
     page_count = db.Column(db.Integer, nullable=False)
+    rating_sum = db.Column(db.INTEGER, nullable=False, default=0)
+    rating_num = db.Column(db.INTEGER, nullable=False, default=0)
 
     genres = db.relationship('Genre', secondary=book_genre, backref=db.backref('books'))
 
     def __repr__(self):
         return '<Book %r>' % self.name
+
+    @property
+    def rating(self):
+        if self.rating_num > 0:
+            return self.rating_sum / self.rating_num
+        return 0
+
+    def reCount(self, number_sum):
+        self.rating_sum = self.rating_sum + int(number_sum)
+        self.rating_num = self.rating_num + 1
 
 
 class Genre(db.Model):
@@ -45,6 +57,9 @@ class Image(db.Model):
     mime_type = db.Column(db.String(128), nullable=False)
     md5_hash = db.Column(db.String(256), nullable=False, unique=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
+    object_type = db.Column(db.String(100))
+    object_id = db.Column(db.INTEGER)
+    active = db.Column(db.BOOLEAN, nullable=False, default=False)
 
     book = db.relationship('Book', backref=db.backref('image'))
 
@@ -56,9 +71,9 @@ class Image(db.Model):
         _, ext = os.path.splitext(self.file_name)
         return str(self.id) + ext
 
-    # @property
-    # def url(self):
-    #     return url_for('image', image_id=self.id)
+    @property
+    def url(self):
+        return url_for('image', image_id=self.id)
 
 
 CONST_STATUS = 1
@@ -83,7 +98,7 @@ class Review(db.Model):
         return '<Review %r>' % self.text_review
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
