@@ -68,6 +68,20 @@ def create():
     return redirect(url_for('books.index'))
 
 
+@bp.route('/<int:book_id>/edit')
+def edit(book_id):
+    book = Book.query.get(book_id)
+    genres = Genre.query.all()
+    genre_list = [x.id for x in book.genres]
+    return render_template('books/edit.html', genres=genres, book=book, genre_list=genre_list)
+
+
+@bp.route('/<int:book_id>/update', methods=['POST'])
+def update(book_id):
+    book = Book.query.get(book_id)
+    return redirect(url_for('books.show', book_id=book.id))
+
+
 @bp.route('/<int:book_id>')
 def show(book_id):
     book = Book.query.get(book_id)

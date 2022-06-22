@@ -38,7 +38,7 @@
                         </div>
                         {% if current_user.role_id != 3 %}
                             <div class="mx-2">
-                                <a class="btn btn-warning" href="{{ url_for('books.show', book_id=book.id) }}">Редактирование</a>
+                                <a class="btn btn-warning" href="{{ url_for('books.edit', book_id=book.id) }}">Редактирование</a>
                             </div>
                         {% endif %}
                         {% if current_user.role_id == 1 %}
