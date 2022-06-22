@@ -71,45 +71,48 @@ def create():
 @bp.route('/<int:book_id>')
 def show(book_id):
     book = Book.query.get(book_id)
-    reviews = Review.query.order_by(Review.created_at.desc()).filter(Review.course_id.ilike(course_id)).limit(5)
-    count = Review.query.order_by(Review.created_at.desc()).filter(Review.course_id.ilike(course_id)).count()
+    reviews = Review.query.order_by(Review.created_at.desc()).filter(Review.book_id.ilike(book_id)).limit(5)
+    count = Review.query.order_by(Review.created_at.desc()).filter(Review.book_id.ilike(book_id)).count()
+    genres = book.genres
     if current_user.is_authenticated:
-        user_review = Review.query.filter(Review.course_id.ilike(course_id)).filter(Review.user_id.ilike(current_user.id)).first()
-    return render_template('courses/show.html', course=course, reviews=reviews, user_review=user_review, review_count=count)
+        user_review = Review.query.filter(Review.book_id.ilike(book_id)).filter(Review.user_id.ilike(current_user.id)).first()
+    return render_template('books/show.html', book=book, reviews=reviews, user_review=user_review, review_count=count, genres=genres)
 
 
-# @bp.route('/<int:course_id>/create_review', methods=['POST'])
-# def create_review(course_id):
-#     rating = request.form.get("user_rating_radio")
-#     user_review = request.form.get('user_review')
-#     par = {"user_id": current_user.id, "course_id": course_id, "review_rating": rating, "text_review": user_review}
-#
-#     course = Course.query.get(course_id)
-#     course.reСount(rating)
-#     db.session.add(course)
-#     db.session.commit()
-#
-#     review = Review(**par)
-#     db.session.add(review)
-#     db.session.commit()
-#
-#     flash(f"Отзыв был успешно создан!", 'success')
-#
-#     return redirect(url_for('courses.show', course_id=course_id))
-#
-# @bp.route('/<int:course_id>/reviews')
-# def reviews_show(course_id):
-#     fil = request.args.get('fil', 0, type=int)
-#     page = request.args.get('page', 1, type=int)
-#     pagination = Review.query.paginate(page, PER_PAGE)
-#
-#     if fil == 0:
-#         reviews = Review.query.order_by(Review.created_at.desc()).filter(Review.course_id.ilike(course_id)).limit(PER_PAGE).offset((page-1)*PER_PAGE)
-#     elif fil == 1:
-#         reviews = Review.query.order_by(Review.created_at.asc()).filter(Review.course_id.ilike(course_id)).limit(PER_PAGE).offset((page-1)*PER_PAGE)
-#     elif fil == 2:
-#         reviews = Review.query.order_by(Review.review_rating.desc()).filter(Review.course_id.ilike(course_id)).limit(PER_PAGE).offset((page-1)*PER_PAGE)
-#     else:
-#         reviews = Review.query.order_by(Review.review_rating.asc()).filter(Review.course_id.ilike(course_id)).limit(PER_PAGE).offset((page-1)*PER_PAGE)
-#
-#     return render_template('courses/reviews.html', reviews=reviews, fil=fil, pagination=pagination)
+@bp.route('/<int:book_id>/create_review', methods=['POST'])
+def create_review(book_id):
+    rating = request.form.get("user_rating_radio")
+    user_review = request.form.get('user_review')
+    par = {"user_id": current_user.id, "book_id": book_id, "review_rating": rating, "text_review": user_review}
+
+    book = Book.query.get(book_id)
+    book.reCount(rating)
+    db.session.add(book)
+    db.session.commit()
+
+    review = Review(**par)
+    db.session.add(review)
+    db.session.commit()
+
+    flash(f"Отзыв был успешно создан!", 'success')
+
+    return redirect(url_for('books.show', book_id=book_id))
+
+
+@bp.route('/<int:book_id>/reviews')
+def reviews_show(book_id):
+    fil = request.args.get('fil', 0, type=int)
+    page = request.args.get('page', 1, type=int)
+
+    if fil == 0:
+        reviews = Review.query.order_by(Review.created_at.desc()).filter(Review.book_id.ilike(book_id))
+    elif fil == 1:
+        reviews = Review.query.order_by(Review.created_at.asc()).filter(Review.book_id.ilike(book_id))
+    elif fil == 2:
+        reviews = Review.query.order_by(Review.review_rating.desc()).filter(Review.book_id.ilike(book_id))
+    else:
+        reviews = Review.query.order_by(Review.review_rating.asc()).filter(Review.book_id.ilike(book_id))
+
+    pagination = reviews.paginate(page, PER_PAGE)
+    reviews = pagination.items
+    return render_template('books/reviews.html', reviews=reviews, fil=fil, pagination=pagination)
