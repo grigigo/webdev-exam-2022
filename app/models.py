@@ -23,7 +23,7 @@ class Book(db.Model):
     rating_sum = db.Column(db.INTEGER, nullable=False, default=0)
     rating_num = db.Column(db.INTEGER, nullable=False, default=0)
 
-    genres = db.relationship('Genre', secondary=book_genre, backref=db.backref('books'))
+    genres = db.relationship('Genre', secondary=book_genre, backref=db.backref('books', cascade="all,delete"))
 
     def __repr__(self):
         return '<Book %r>' % self.name
@@ -61,7 +61,7 @@ class Image(db.Model):
     object_id = db.Column(db.INTEGER)
     active = db.Column(db.BOOLEAN, nullable=False, default=False)
 
-    book = db.relationship('Book', backref=db.backref('image'))
+    book = db.relationship('Book', backref=db.backref('image', cascade="all,delete"))
 
     def __repr__(self):
         return '<Image %r>' % self.file_name
@@ -91,8 +91,8 @@ class Review(db.Model):
     status_id = db.Column(db.Integer, db.ForeignKey('status.id'), default=CONST_STATUS)
 
     status = db.relationship('Status', backref=db.backref('reviews'))
-    book = db.relationship('Book', backref=db.backref('reviews'))
-    user = db.relationship('User', backref=db.backref('reviews'))
+    book = db.relationship('Book', backref=db.backref('reviews', cascade="all,delete"))
+    user = db.relationship('User', backref=db.backref('reviews', cascade="all,delete"))
 
     def __repr__(self):
         return '<Review %r>' % self.text_review

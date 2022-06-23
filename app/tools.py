@@ -2,29 +2,22 @@ import hashlib
 import uuid
 import os
 from werkzeug.utils import secure_filename
-from models import Book, Image, Genre
+from models import Book, Image
 from app import db, app
-from sqlalchemy import or_
 
 
 class BooksFilter:
-    def __init__(self, name, genre_ids):
+    def __init__(self, name):
         self.name = name
-        self.genre_ids = genre_ids
         self.query = Book.query
 
     def perform(self):
         self.__filter_by_name()
-        # self.__filter_by_genre_ids()
         return self.query.order_by(Book.year.desc())
 
     def __filter_by_name(self):
         if self.name:
             self.query = self.query.filter(Book.name.ilike('%' + self.name + '%'))
-
-    # def __filter_by_genre_ids(self):
-    #     if self.genre_ids:
-    #         self.query = Genre.query.filter(Genre.id.in_(self.genre_ids))
 
 
 class ImageSaver:
