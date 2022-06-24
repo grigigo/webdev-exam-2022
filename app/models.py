@@ -112,7 +112,7 @@ class User(db.Model, UserMixin):
     role = db.relationship('Role', backref=db.backref('users'))
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<User %r>' % self.full_name
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

@@ -26,7 +26,10 @@
                     </div>
                     <div class="mb-3 d-flex flex-column flex-grow-1">
                         <label for="description">Описание</label>
-                        <textarea class="form-control flex-grow-1" name="desc" id="description" cols="30" rows="5">{% if action == 'edit' %}{{ book.desc }}{% endif %}</textarea>
+                        <textarea class="form-control flex-grow-1" name="desc" id="description" cols="20" rows="5">{% if action == 'edit' %}{{ book.desc }}{% endif %}</textarea>
+                        <script>
+                            const easyMDE = new EasyMDE();
+                        </script>
                     </div>
                     <div class="mb-3">
                         <label for="year">Год издания</label>

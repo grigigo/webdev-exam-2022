@@ -6,6 +6,7 @@ from app import db, app
 from models import Genre, Book, User, Review
 from tools import ImageSaver, BooksFilter
 import bleach
+import markdown
 
 bp = Blueprint('books', __name__, url_prefix='/books')
 
@@ -20,7 +21,7 @@ def params():
 
 def search_params():
     return {
-        'name': request.args.get('name'),
+        'name': request.args.get('name')
     }
 
 

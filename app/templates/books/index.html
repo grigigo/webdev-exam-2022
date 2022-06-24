@@ -54,9 +54,9 @@
                                         <div class="modal-body m-1">
                                             Вы уверены, что хотите удалить книгу "{{ book.name }}"?
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
-                                            <a class="btn btn-danger" href="{{ url_for('books.delete', book_id=book.id) }}">Да</a>
+                                        <div class="modal-footer p-1">
+                                            <button type="button" class="btn btn-secondary col-2" data-bs-dismiss="modal">Нет</button>
+                                            <a class="btn btn-danger col-2" href="{{ url_for('books.delete', book_id=book.id) }}">Да</a>
                                         </div>
                                     </div>
                                 </div>

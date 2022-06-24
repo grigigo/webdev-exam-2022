@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <section class="about mb-5">
+            <div class="container">
+                <div class="row d-flex mb-3">
+                    <h6 class="m-auto col text-end align-self-center">Пользователь:</h6>
+                    <p class="m-auto col align-self-center">
+                        {{ review.user.full_name }}
+                    </p>
+                </div>
+                <div class="row d-flex mb-3">
+                    <h6 class="m-auto col text-end align-self-center">Книга:</h6>
+                    <p class="m-auto col align-self-center">
+                        {{ review.book.name }}
+                    </p>
+                </div>
+                <div class="row d-flex mb-3">
+                    <h6 class="m-auto col text-end align-self-center">Дата написания:</h6>
+                    <p class="m-auto col align-self-center">
+                        {{ review.created_at }}
+                    </p>
+                </div>
+                <div class="row d-flex mb-3">
+                    <h6 class="m-auto col text-end align-self-center">Оценка:</h6>
+                    <span class="m-auto col align-self-center">
+                        {{ "%.2f" | format(review.review_rating) }}
+                    </span>
+                </div>
+                <div class="row d-flex mb-3">
+                    <h6 class="m-auto col text-end align-self-center">Отзыв:</h6>
+                    <p class="m-auto col align-self-center"></p>
+                </div>
+                <div class="row bg-secondary p-2 text-dark bg-opacity-10 mb-3 w-75 mx-auto">
+                    {{ review.text_review }}
+                </div>
+                <div class="row justify-content-center flex-direction-row mb-3">
+                    <div class="col-2 d-flex justify-content-end">
+                        <a class="btn btn-danger" href="{{ url_for('reviews.change_status', review_id=review.id, status_id=3) }}">Отклонить</a>
+                    </div>
+                    <div class="col-2">
+                        <a class="btn btn-success" href="{{ url_for('reviews.change_status', review_id=review.id, status_id=2) }}">Одобрить</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}

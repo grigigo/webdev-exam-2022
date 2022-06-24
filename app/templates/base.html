@@ -9,6 +9,7 @@
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
 
     <title>Образовательный портал | Московский Политех</title>
 </head>
@@ -30,17 +31,15 @@
                                href="{{ url_for('index') }}">Главная</a>
                         </li>
                         {% if current_user.role_id == 3 %}
-                            <li>
-                                <a class="nav-link {% if request.endpoint == 'reviews' %} active {% endif %}" aria-current="page" href="{{ url_for('reviews') }}">Мои рецензии</a>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'reviews.index' %} active {% endif %}" aria-current="page" href="{{ url_for('reviews.index') }}">Мои рецензии</a>
                             </li>
-                        {% else %}
-                            {% if current_user.role_id == 2 %}
-                                <li>
-                                    <a class="nav-link {% if request.endpoint == 'reviews' %} active {% endif %}" aria-current="page" href="{{ url_for('reviews') }}">Модерация рецензий</a>
-                                </li>
-                            {% endif %}
                         {% endif %}
-
+                        {% if current_user.role_id == 2 %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'reviews.moder' %} active {% endif %}" aria-current="page" href="{{ url_for('reviews.moder') }}">Модерация рецензий</a>
+                            </li>
+                        {% endif %}
                         {% if current_user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page" href="{{ url_for('auth.logout') }}">{{ current_user.full_name }} | Выйти</a>
@@ -81,6 +80,7 @@
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 
     <script defer src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
 </body>
 
 </html>
