@@ -42,7 +42,7 @@ def change_status(review_id):
     db.session.add(review)
     db.session.commit()
 
-    flash(f'Отзыв пользователя {review.user.full_name} {review.status.name}!', 'warning')
+    flash(f'Отзыв пользователя {review.user.full_name} {review.status.name}!', 'success')
 
     return redirect(url_for('reviews.moder'))
 
